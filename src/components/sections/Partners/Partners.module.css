@@ -1,0 +1,28 @@
+.partners {
+  padding-block: var(--space-8);
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-8);
+}
+
+.item {
+  opacity: 0.5;
+  transition: opacity var(--transition-fast);
+}
+
+.item:hover {
+  opacity: 1;
+}
+
+.logo {
+  height: 28px;
+  width: auto;
+  filter: grayscale(1) brightness(2);
+}

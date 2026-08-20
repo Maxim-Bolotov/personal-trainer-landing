@@ -1,0 +1,111 @@
+.section {
+  padding-block: var(--space-12);
+}
+
+.carousel {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--space-6);
+  margin-top: var(--space-10);
+}
+
+.navButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid var(--color-border);
+  color: var(--color-text-primary);
+  font-size: var(--fs-h4);
+  transition: border-color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.navButton:hover {
+  border-color: var(--color-accent);
+  background-color: var(--color-accent);
+}
+
+.card {
+  position: relative;
+  max-width: 720px;
+  margin-inline: auto;
+  padding: var(--space-8);
+  background-color: var(--color-surface);
+  border-radius: var(--radius-lg);
+  text-align: center;
+}
+
+.quoteMark {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: 4rem;
+  line-height: 1;
+  color: var(--color-accent);
+  margin-bottom: var(--space-2);
+}
+
+.quote {
+  font-size: var(--fs-body-lg);
+  color: var(--color-text-primary);
+  line-height: 1.5;
+}
+
+.author {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  margin-top: var(--space-6);
+}
+
+.avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.name {
+  font-weight: 600;
+  font-size: var(--fs-body-sm);
+  text-align: left;
+}
+
+.role {
+  font-size: var(--fs-caption);
+  color: var(--color-text-secondary);
+  text-align: left;
+}
+
+.dots {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-2);
+  margin-top: var(--space-6);
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--color-border);
+  transition: background-color var(--transition-fast), transform var(--transition-fast);
+}
+
+.dotActive {
+  background-color: var(--color-accent);
+  transform: scale(1.3);
+}
+
+@media (max-width: 640px) {
+  .carousel {
+    grid-template-columns: 1fr;
+  }
+
+  .navButton {
+    display: none;
+  }
+}
