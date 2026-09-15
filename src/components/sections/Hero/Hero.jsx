@@ -5,16 +5,19 @@ import styles from './Hero.module.css';
 function Hero() {
   return (
     <section id="home" className={styles.hero}>
-      <span className={styles.watermark} aria-hidden="true">
-        JOHN DOE
-      </span>
-
       <Container className={styles.inner}>
         <div className={styles.content}>
-          <h1 className={styles.title}>Превращай трудности в победы!</h1>
+          <h1 className={styles.title}>
+            Стань сильнее.
+            <br />
+            Выгляди лучше.
+            <br />
+            Живи увереннее.
+          </h1>
           <p className={styles.text}>
-            Как увлечённый персональный тренер, я помогаю людям достигать своих целей в
-            фитнесе через индивидуальный коучинг и поддержку.
+            Персональный тренер, который поможет тебе стать сильнее, увереннее в себе и в
+            отличной форме — благодаря индивидуальным программам тренировок и постоянной
+            поддержке на каждом шаге.
           </p>
           <Button as="a" href="#programs" variant="primary" size="lg">
             Начать
@@ -25,7 +28,7 @@ function Hero() {
           <img
             className={styles.image}
             src="/images/hero-photo.svg" /* TODO: заменить на экспорт из Figma (Export → PNG/JPG, 535×883 или больше) */
-            alt="Персональный тренер Джон"
+            alt="Персональный тренер"
             width={535}
             height={883}
             fetchPriority="high"

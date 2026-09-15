@@ -18,10 +18,12 @@
   --color-text-muted: #6b6b6b;
 
   /* ---------- Typography ---------- */
-  --font-heading: 'Oxanium', sans-serif;
-  --font-body: 'Outfit', sans-serif;
+  /* Exo 2 / Golos Text: closest match to the original Oxanium/Outfit look
+     that actually ships Cyrillic glyphs (see main.jsx for why). */
+  --font-heading: 'Exo 2', sans-serif;
+  --font-body: 'Golos Text', sans-serif;
 
-  --fs-h1: 5rem; /* 80px */
+  --fs-h1: 3.5625rem; /* 57px */
   --fs-h1-mobile: 2.75rem;
   --fs-h2: 3rem; /* 48px */
   --fs-h2-mobile: 2rem;
