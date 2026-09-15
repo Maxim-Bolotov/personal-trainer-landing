@@ -21,23 +21,14 @@ function Programs() {
               key={program.id}
               className={`${styles.card} ${program.featured ? styles.featured : ''}`}
             >
-              {program.featured && <span className={styles.badge}>Популярный</span>}
-
               <h3 className={styles.title}>{program.title}</h3>
-              <p className={styles.description}>{program.description}</p>
 
               <p className={styles.price}>
-                <span className={styles.priceValue}>${program.price}</span>
-                <span className={styles.pricePeriod}>/ {program.period}</span>
+                <span className={styles.priceValue}>{program.price}$</span>
               </p>
+              <p className={styles.pricePeriod}>Абонемент на {program.period}</p>
 
-              <ul className={styles.features}>
-                {program.features.map((feature) => (
-                  <li key={feature} className={styles.feature}>
-                    {feature}
-                  </li>
-                ))}
-              </ul>
+              <p className={styles.description}>{program.description}</p>
 
               <Button
                 as="a"
