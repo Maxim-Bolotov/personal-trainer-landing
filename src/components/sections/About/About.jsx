@@ -2,9 +2,9 @@ import Container from '../../ui/Container';
 import styles from './About.module.css';
 
 const stats = [
-  { id: 'clients', value: '250+', label: 'довольных клиентов' },
-  { id: 'years', value: '8', label: 'лет практики' },
-  { id: 'programs', value: '15+', label: 'авторских программ' },
+  { id: 'clients', value: '2000+', label: 'довольных клиентов' },
+  { id: 'years', value: '10', label: 'лет опыта' },
+  { id: 'programs', value: '15', label: 'Лет в спорте' },
 ];
 
 function About() {
@@ -14,10 +14,10 @@ function About() {
         <div className={styles.imageWrapper}>
           <img
             className={styles.image}
-            src="/images/about-photo.svg" /* TODO: заменить на экспорт из Figma */
-            alt="Джон — персональный тренер"
-            width={480}
-            height={560}
+            src="/images/about-photo.png"
+            alt="Персональный тренер"
+            width={545}
+            height={453}
             loading="lazy"
           />
         </div>
@@ -25,14 +25,8 @@ function About() {
         <div className={styles.content}>
           <h2 className={styles.title}>Кто такой Джон?</h2>
           <p className={styles.text}>
-            Я увлечён тем, что могу помочь людям раскрыть свой потенциал. Более восьми лет я
-            занимаюсь персональным тренерством, сочетая научный подход к тренировкам с
-            вниманием к индивидуальным особенностям каждого клиента.
-          </p>
-          <p className={styles.text}>
-            Моя миссия — не просто провести тренировку, а выстроить систему, которая станет
-            частью вашей жизни: осознанные тренировки, сбалансированное питание и постоянная
-            поддержка на пути к результату.
+            Как увлечённый персональный тренер, я верю в то, что могу помочь людям достичь своих
+            целей в фитнесе через индивидуальный коучинг и поддержку.
           </p>
 
           <dl className={styles.stats}>
