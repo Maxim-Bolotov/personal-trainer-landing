@@ -1,7 +1,6 @@
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
 import Hero from './components/sections/Hero';
-import Partners from './components/sections/Partners';
 import About from './components/sections/About';
 import Qualifications from './components/sections/Qualifications';
 import Programs from './components/sections/Programs';
@@ -15,7 +14,6 @@ function App() {
       <Header />
       <main>
         <Hero />
-        <Partners />
         <About />
         <Qualifications />
         <Programs />
