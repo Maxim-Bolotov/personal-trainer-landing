@@ -1,21 +1,18 @@
-import { useId } from 'react';
 import styles from './Faq.module.css';
 
 /**
- * Один пункт аккордеона FAQ.
- * Управляется извне (controlled), чтобы гарантировать
- * только один открытый вопрос за раз.
+ * @param {string} question
+ * @param {string} answer
+ * @param {boolean} isOpen
+ * @param {() => void} onToggle
  */
 function FaqItem({ question, answer, isOpen, onToggle }) {
-  const panelId = useId();
-
   return (
     <div className={styles.item}>
       <button
         type="button"
         className={styles.question}
         aria-expanded={isOpen}
-        aria-controls={panelId}
         onClick={onToggle}
       >
         <span>{question}</span>
@@ -24,11 +21,7 @@ function FaqItem({ question, answer, isOpen, onToggle }) {
         </span>
       </button>
 
-      <div
-        id={panelId}
-        role="region"
-        className={`${styles.answerWrapper} ${isOpen ? styles.answerOpen : ''}`}
-      >
+      <div className={`${styles.answerWrapper} ${isOpen ? styles.answerOpen : ''}`}>
         <p className={styles.answer}>{answer}</p>
       </div>
     </div>

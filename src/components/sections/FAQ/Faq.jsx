@@ -15,7 +15,12 @@ function Faq() {
   return (
     <section id="faq" className={styles.section}>
       <Container className={styles.inner}>
-        <SectionTitle eyebrow="FAQ" title="Часто задаваемые вопросы" className={styles.title} />
+        <SectionTitle
+          eyebrow="FAQ"
+          title="Часто задаваемые вопросы"
+          description="Я здесь, чтобы помочь!"
+          className={styles.title}
+        />
 
         <div className={styles.list}>
           {faqItems.map((item) => (
