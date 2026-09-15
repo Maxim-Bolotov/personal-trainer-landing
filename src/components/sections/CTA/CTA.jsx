@@ -16,7 +16,7 @@ function CTA() {
         </div>
 
         <div className={styles.content}>
-          <h2 className={styles.title}>Хотите тренироваться со мной?</h2>
+          <h2 className={styles.title}>Хочешь тренироваться со мной?</h2>
           <p className={styles.text}>
             Запишитесь на бесплатную вводную консультацию — обсудим цели, текущий уровень
             подготовки и подберём программу, которая приведёт к результату.
