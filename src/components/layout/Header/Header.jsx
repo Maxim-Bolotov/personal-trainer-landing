@@ -18,7 +18,7 @@ function Header() {
   const handleLinkClick = () => setIsMenuOpen(false);
 
   return (
-    <header className={`${styles.header} ${isScrolled ? styles.scrolled : ''}`}>
+    <header className={`${styles.header} ${isScrolled || isMenuOpen ? styles.scrolled : ''}`}>
       <Container className={styles.inner}>
         <a href="#home" className={styles.logo} onClick={handleLinkClick}>
           Персональный
