@@ -1,26 +1,40 @@
 import Container from '../../ui/Container';
-import SectionTitle from '../../ui/SectionTitle';
-import { qualifications } from '../../../data/qualifications';
+import { qualificationBadges } from '../../../data/qualifications';
 import styles from './Qualifications.module.css';
 
 function Qualifications() {
   return (
     <section id="qualifications" className={styles.section}>
       <Container>
-        <SectionTitle
-          eyebrow="Почему я"
-          title="Квалификация и качества"
-          description="Профессиональный подход, который сочетает опыт, гибкость и постоянную вовлечённость в результат каждого клиента."
-        />
+        <div className={styles.inner}>
+          <div className={styles.content}>
+            <h2 className={styles.title}>Квалификация</h2>
+            <p className={styles.text}>
+              Сертифицированный персональный тренер с многолетней практикой: научный подход к
+              тренировкам, индивидуальные программы питания и постоянная поддержка на пути к
+              результату.
+            </p>
 
-        <ul className={styles.grid}>
-          {qualifications.map((item) => (
-            <li key={item.id} className={styles.card}>
-              <h3 className={styles.cardTitle}>{item.title}</h3>
-              <p className={styles.cardText}>{item.description}</p>
-            </li>
-          ))}
-        </ul>
+            <ul className={styles.badges}>
+              {qualificationBadges.map((badge) => (
+                <li key={badge} className={styles.badge}>
+                  {badge}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className={styles.imageWrapper}>
+            <img
+              className={styles.image}
+              src="/images/about-photo.svg" /* TODO: заменить на экспорт из Figma */
+              alt="Персональный тренер — квалификация"
+              width={503}
+              height={478}
+              loading="lazy"
+            />
+          </div>
+        </div>
       </Container>
     </section>
   );

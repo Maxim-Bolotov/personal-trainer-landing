@@ -2,47 +2,99 @@
   padding-block: var(--space-12);
 }
 
-.grid {
+.inner {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: var(--space-5);
-  margin-top: var(--space-8);
+  grid-template-columns: 1fr 0.9fr;
+  align-items: center;
+  gap: var(--space-10);
+  background-color: var(--color-accent);
+  border-radius: var(--radius-lg);
+  padding: var(--space-10);
+  overflow: hidden;
 }
 
-.card {
-  padding: var(--space-6);
-  background-color: var(--color-accent);
-  border-radius: var(--radius-md);
+.content {
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
-  transition: transform var(--transition-base);
+  align-items: flex-start;
+  gap: var(--space-5);
 }
 
-.card:hover {
-  transform: translateY(-6px);
-}
-
-.cardTitle {
-  font-family: var(--font-heading);
-  font-size: var(--fs-h4);
+.title {
+  font-size: var(--fs-h2);
+  text-transform: uppercase;
   color: var(--color-text-primary);
 }
 
-.cardText {
-  font-size: var(--fs-body-sm);
+.text {
+  font-size: var(--fs-body);
   color: rgba(255, 255, 255, 0.85);
-  line-height: 1.5;
+  line-height: 1.6;
+  max-width: 460px;
 }
 
-@media (max-width: 1024px) {
-  .grid {
-    grid-template-columns: repeat(2, 1fr);
+.badges {
+  display: flex;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+}
+
+.badge {
+  padding: var(--space-2) var(--space-5);
+  border-radius: var(--radius-full);
+  background-color: var(--color-text-primary);
+  color: var(--color-accent);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: var(--fs-body-sm);
+  letter-spacing: 0.02em;
+}
+
+.imageWrapper {
+  justify-self: end;
+  width: 100%;
+  max-width: 420px;
+  aspect-ratio: 503 / 478;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(0.5) contrast(1.15) brightness(0.9);
+}
+
+@media (max-width: 900px) {
+  .inner {
+    grid-template-columns: 1fr;
+    text-align: center;
+    padding: var(--space-6);
+  }
+
+  .content {
+    align-items: center;
+    width: 100%;
+  }
+
+  .title {
+    font-size: var(--fs-h2-mobile);
+  }
+
+  .badges {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .imageWrapper {
+    justify-self: center;
+    max-width: 340px;
   }
 }
 
-@media (max-width: 560px) {
-  .grid {
-    grid-template-columns: 1fr;
+@media (max-width: 420px) {
+  .title {
+    font-size: 1.75rem;
   }
 }
