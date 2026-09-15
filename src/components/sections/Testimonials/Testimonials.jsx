@@ -24,23 +24,40 @@ function Testimonials() {
           </button>
 
           <article className={styles.card}>
-            <span className={styles.quoteMark} aria-hidden="true">
-              &ldquo;
-            </span>
+            <div className={styles.textCol}>
+              <span className={styles.quoteMark} aria-hidden="true">
+                <span className={styles.quoteBar} />
+                <span className={styles.quoteBar} />
+              </span>
 
-            <p className={styles.quote}>{current.quote}</p>
+              <p className={styles.quote}>{current.quote}</p>
 
-            <div className={styles.author}>
-              <img
-                src={current.avatar}
-                alt={current.name}
-                className={styles.avatar}
-                loading="lazy"
-              />
-              <div>
+              <div className={styles.author}>
                 <p className={styles.name}>{current.name}</p>
                 <p className={styles.role}>{current.role}</p>
               </div>
+            </div>
+
+            <div className={styles.imageCol}>
+              <div className={styles.photoRow}>
+                <img
+                  src={current.avatar}
+                  alt={current.name}
+                  className={styles.photo}
+                  loading="lazy"
+                />
+                <img
+                  src={current.avatarSecondary}
+                  alt=""
+                  aria-hidden="true"
+                  className={styles.photo}
+                  loading="lazy"
+                />
+              </div>
+              <span className={styles.quoteMarkSmall} aria-hidden="true">
+                <span className={styles.quoteBarSmall} />
+                <span className={styles.quoteBarSmall} />
+              </span>
             </div>
           </article>
 
