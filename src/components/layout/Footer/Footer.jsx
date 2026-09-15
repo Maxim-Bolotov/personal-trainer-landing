@@ -1,6 +1,7 @@
 import Container from '../../ui/Container';
 import { navLinks } from '../../../data/navigation';
 import { socialLinks } from '../../../data/social';
+import { contactInfo } from '../../../data/contact';
 import styles from './Footer.module.css';
 
 function Footer() {
@@ -19,9 +20,26 @@ function Footer() {
             <p className={styles.tagline}>
               Индивидуальный коучинг и программы тренировок, которые приводят к результату.
             </p>
+
+            <ul className={styles.socialList}>
+              {socialLinks.map((social) => (
+                <li key={social.id}>
+                  <a
+                    href={social.href}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className={styles.socialLink}
+                    aria-label={social.label}
+                  >
+                    {social.icon}
+                  </a>
+                </li>
+              ))}
+            </ul>
           </div>
 
-          <nav aria-label="Навигация в футере">
+          <nav aria-label="Навигация в футере" className={styles.col}>
+            <p className={styles.colTitle}>Меню</p>
             <ul className={styles.navList}>
               {navLinks.map((link) => (
                 <li key={link.href}>
@@ -33,20 +51,24 @@ function Footer() {
             </ul>
           </nav>
 
-          <ul className={styles.socialList}>
-            {socialLinks.map((social) => (
-              <li key={social.id}>
-                <a
-                  href={social.href}
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  className={styles.socialLink}
-                >
-                  {social.label}
-                </a>
-              </li>
-            ))}
-          </ul>
+          <div className={styles.col}>
+            <p className={styles.colTitle}>Contact</p>
+            <ul className={styles.contactList}>
+              {contactInfo.map((item) =>
+                item.href ? (
+                  <li key={item.id}>
+                    <a href={item.href} className={styles.contactLink}>
+                      {item.label}
+                    </a>
+                  </li>
+                ) : (
+                  <li key={item.id} className={styles.contactLink}>
+                    {item.label}
+                  </li>
+                )
+              )}
+            </ul>
+          </div>
         </div>
 
         <div className={styles.bottom}>

@@ -29,23 +29,64 @@
   color: var(--color-text-secondary);
 }
 
+.col {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.colTitle {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: var(--fs-body-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-primary);
+}
+
 .navList,
-.socialList {
+.contactList {
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
 }
 
 .navLink,
-.socialLink {
+.contactLink {
   font-size: var(--fs-body-sm);
   color: var(--color-text-secondary);
   transition: color var(--transition-fast);
 }
 
 .navLink:hover,
-.socialLink:hover {
+.contactLink a:hover {
   color: var(--color-accent);
+}
+
+.socialList {
+  display: flex;
+  flex-direction: row;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+}
+
+.socialLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--color-border);
+  font-size: var(--fs-caption);
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  transition: color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.socialLink:hover {
+  color: var(--color-text-primary);
+  border-color: var(--color-accent);
 }
 
 .bottom {
