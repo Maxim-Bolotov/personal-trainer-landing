@@ -2,44 +2,48 @@
   position: relative;
   overflow: hidden;
   padding-block: var(--space-10) var(--space-16);
+  background-color: #000;
 }
 
 .inner {
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
-  align-items: center;
+  grid-template-columns: 1fr 1.35fr;
   gap: var(--space-8);
+  align-items: center;
 }
 
 .content {
   display: flex;
+  height: 100%;
   flex-direction: column;
-  align-items: flex-start;
-  gap: var(--space-5);
-  max-width: 620px;
+  justify-content: space-between;
+  gap: 28px;
+  max-width: 480px;
 }
 
 .title {
-  font-size: var(--fs-h1);
+  font-size: 48px;
   text-transform: uppercase;
   color: var(--color-text-primary);
 }
 
 .text {
-  font-size: var(--fs-body-lg);
+  font-size: 20px;
   font-weight: 400;
   color: var(--color-text-secondary);
   max-width: 480px;
 }
 
+/* Шире, чем раньше (628/699 -> 4/3), высота задаётся не фиксированным
+   значением, а той же формулой "ширина + aspect-ratio", что и до этого —
+   просто с более широким соотношением сторон. object-fit: cover в .image
+   кадрирует видео под любую форму обёртки. */
 .imageWrapper {
   position: relative;
-  justify-self: end;
   width: 100%;
-  max-width: 535px;
-  aspect-ratio: 535 / 699;
+  aspect-ratio: 4 / 3;
   border-radius: var(--radius-lg);
   overflow: hidden;
 }
@@ -66,12 +70,60 @@
 
   .imageWrapper {
     justify-self: center;
+    width: 100%;
     max-width: 380px;
+    aspect-ratio: 628 / 699;
   }
 }
 
 @media (max-width: 600px) {
   .title {
     font-size: var(--fs-h1-mobile);
+  }
+}
+
+/* На десктопе (full-height секции, global.css) вертикальные отступы
+ * секции не нужны, а min-height там (main > section) заменяем на явный
+ * height той же формулой — flex-grow здесь не подходит: у flex-item с
+ * flex-basis:auto высота сперва считается от контента, а при aspect-ratio
+ * 9/16 + процентной высоте видео это даёт круговую зависимость и "плавающую"
+ * содержимое-высоту БОЛЬШЕ доступного экрана (видео/секция вылезали за viewport).
+ * С явным height у .hero % высоты у потомков resolve'ятся сразу и однозначно:
+ * .inner (height:100%) → grid-row (1fr) → .imageWrapper (height:100% +
+ * aspect-ratio 9/16, ширина считается от высоты). Чем больше экран, тем
+ * больше секция и видео — но не больше доступного viewport. */
+@media (min-width: 1025px) {
+  .hero {
+    padding-block: 0;
+    height: calc(100vh - var(--header-height, 90px));
+  }
+
+  .inner {
+    height: 100%;
+    /* Обе колонки auto: каждая подстраивается под ширину своего содержимого
+       (.content ограничен max-width, .imageWrapper — видео + паддинги). */
+    grid-template-columns: auto auto;
+    grid-template-rows: 1fr;
+  }
+
+  /* .content НЕ растягиваем на всю высоту строки (в отличие от .imageWrapper) —
+     иначе space-between раздвигает заголовок/текст/кнопку на всю высоту секции.
+     Текстовый блок остаётся компактным и по центру, как и было. */
+  .content {
+    height: auto;
+    align-self: center;
+  }
+
+  .imageWrapper {
+    width: auto;
+    height: 100%;
+    aspect-ratio: 9 / 16;
+    /* box-sizing: content-box — паддинги ДОБАВЛЯются к ширине, посчитанной
+       из aspect-ratio, а не съедают её (иначе видео сжималось бы внутрь
+       паддингов). Итог: рамка вокруг видео 20px с каждой стороны, а сама
+       колонка грида (auto) под неё и подстраивается. */
+    box-sizing: content-box;
+    padding-inline: 20px;
+    justify-self: center;
   }
 }

@@ -25,13 +25,16 @@ function Hero() {
         </div>
 
         <div className={styles.imageWrapper}>
-          <img
+          <video
             className={styles.image}
-            src="/images/hero-photo.svg" /* TODO: заменить на экспорт из Figma (Export → PNG/JPG, 535×883 или больше) */
-            alt="Персональный тренер"
-            width={535}
-            height={883}
-            fetchPriority="high"
+            src="/videos/hero.mp4"
+            poster="/images/hero-poster.jpg"
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="auto"
+            aria-label="Тренировка с персональным тренером"
           />
         </div>
       </Container>
