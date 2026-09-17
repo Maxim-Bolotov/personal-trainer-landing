@@ -2,17 +2,34 @@
   padding-block: var(--space-12);
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--space-6);
-  margin-top: var(--space-10);
-  align-items: stretch;
+.carousel {
+  position: relative;
+  margin-top: var(--space-3);
 }
+
+.track {
+  display: flex;
+  gap: var(--space-6);
+  align-items: stretch;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding-block: var(--space-2);
+  scrollbar-width: none;
+}
+
+.track::-webkit-scrollbar {
+  display: none;
+}
+
 
 .card {
   position: relative;
   display: flex;
+  flex: 0 0 auto;
+  width: min(320px, 85vw);
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
   flex-direction: column;
   align-items: center;
   text-align: center;
@@ -22,6 +39,12 @@
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   transition: transform var(--transition-base), border-color var(--transition-base);
+}
+
+@media (min-width: 901px) {
+  .card {
+    width: calc((100% - 2 * var(--space-6)) / 3);
+  }
 }
 
 .card:hover {
@@ -36,13 +59,23 @@
 }
 
 .title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(var(--fs-h3) * var(--lh-heading) * 3);
+  line-height: var(--lh-heading);
   font-family: var(--font-heading);
   font-size: var(--fs-h3);
   text-transform: uppercase;
 }
 
 .description {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex-grow: 1;
+  min-height: calc(var(--fs-body-sm) * var(--lh-body) * 3);
+  line-height: var(--lh-body);
   font-size: var(--fs-body-sm);
   color: var(--color-text-secondary);
 }
@@ -68,10 +101,53 @@
   margin-top: var(--space-2);
 }
 
+.navButton {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  background-color: var(--color-surface);
+  color: var(--color-text-primary);
+  font-size: 1.375rem;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: var(--shadow-card);
+  transition: background-color var(--transition-fast), border-color var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.navButton:first-of-type {
+  left: -26px;
+}
+
+.navButton:last-of-type {
+  right: -26px;
+}
+
+.navButton:hover {
+  background-color: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-text-primary);
+}
+
 @media (max-width: 900px) {
-  .grid {
-    grid-template-columns: 1fr;
-    max-width: 420px;
-    margin-inline: auto;
+  .navButton {
+    display: none;
+  }
+}
+
+/* На десктопе (full-height секции, global.css) вертикальные отступы
+ * секции не нужны — высоту и центрирование контента уже даёт
+ * main > section { min-height; justify-content: center } */
+@media (min-width: 1025px) {
+  .section {
+    padding-block: 0;
   }
 }
