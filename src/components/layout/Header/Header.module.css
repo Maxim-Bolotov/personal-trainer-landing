@@ -51,6 +51,7 @@
   font-size: var(--fs-body);
   line-height: 1.2;
   text-transform: uppercase;
+  text-align: center;
   color: var(--color-text-primary);
   white-space: nowrap;
 }
@@ -70,6 +71,14 @@
 
 .navLink:hover {
   color: var(--color-text-primary);
+}
+
+.navLinkActive {
+  color: var(--color-accent);
+}
+
+.navLinkActive:hover {
+  color: var(--color-accent);
 }
 
 .actions {
