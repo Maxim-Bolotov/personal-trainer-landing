@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+# Env files with secrets (Telegram bot token/chat_id) — see .env.example
+.env
+.env.local
+.env.*.local

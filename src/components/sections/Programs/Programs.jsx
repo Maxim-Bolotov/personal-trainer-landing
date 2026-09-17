@@ -4,6 +4,7 @@ import SectionTitle from "../../ui/SectionTitle";
 import Button from "../../ui/Button";
 import { programs } from "../../../data/programs";
 import { formatPrice } from "../../../utils/formatPrice";
+import { useBookingModal } from "../../../hooks/useBookingModal";
 import styles from "./Programs.module.css";
 
 // Тройной повтор карточек для бесшовной зацикленной прокрутки: изначально встаём
@@ -14,6 +15,7 @@ import styles from "./Programs.module.css";
 const loopedPrograms = [...programs, ...programs, ...programs];
 
 function Programs() {
+  const { openModal } = useBookingModal();
   const trackRef = useRef(null);
   const settleTimer = useRef(null);
 
@@ -97,11 +99,11 @@ function Programs() {
                 <p className={styles.description}>{program.description}</p>
 
                 <Button
-                  as="a"
-                  href="#faq"
+                  type="button"
                   variant={program.featured ? "primary" : "outline"}
                   size="md"
                   className={styles.cta}
+                  onClick={() => openModal(program.id)}
                 >
                   Выбрать программу
                 </Button>

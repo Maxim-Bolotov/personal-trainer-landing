@@ -2,9 +2,11 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import Container from '../../ui/Container';
 import Button from '../../ui/Button';
 import { navLinks } from '../../../data/navigation';
+import { useBookingModal } from '../../../hooks/useBookingModal';
 import styles from './Header.module.css';
 
 function Header() {
+  const { openModal } = useBookingModal();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeId, setActiveId] = useState(navLinks[0]?.href.slice(1) ?? '');
@@ -100,7 +102,13 @@ function Header() {
         </nav>
 
         <div className={styles.actions}>
-          <Button as="a" href="#programs" variant="primary" size="sm" className={styles.cta}>
+          <Button
+            type="button"
+            variant="primary"
+            size="sm"
+            className={styles.cta}
+            onClick={() => openModal()}
+          >
             Начать
           </Button>
 

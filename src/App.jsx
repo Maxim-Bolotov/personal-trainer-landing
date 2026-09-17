@@ -7,10 +7,12 @@ import Programs from "./components/sections/Programs";
 import Testimonials from "./components/sections/Testimonials";
 import Faq from "./components/sections/FAQ";
 import CTA from "./components/sections/CTA";
+import BookingModal from "./components/modals/BookingModal";
+import { BookingModalProvider } from "./context/BookingModalProvider";
 
 function App() {
   return (
-    <>
+    <BookingModalProvider>
       <Header />
       <main>
         <Hero />
@@ -22,7 +24,8 @@ function App() {
         <CTA />
       </main>
       {/* <Footer /> */}
-    </>
+      <BookingModal />
+    </BookingModalProvider>
   );
 }
 

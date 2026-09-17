@@ -1,10 +1,12 @@
 import Container from '../../ui/Container';
 import Button from '../../ui/Button';
 import { useScrollReveal } from '../../../hooks/useScrollReveal';
+import { useBookingModal } from '../../../hooks/useBookingModal';
 import reveal from '../../../styles/scrollReveal.module.css';
 import styles from './CTA.module.css';
 
 function CTA() {
+  const { openModal } = useBookingModal();
   const [sectionRef, isVisible] = useScrollReveal();
 
   return (
@@ -42,12 +44,12 @@ function CTA() {
             подготовки и подберём программу, которая приведёт к результату.
           </p>
           <Button
-            as="a"
-            href="#programs"
+            type="button"
             variant="primary"
             size="lg"
             className={[reveal.reveal, reveal.fromRight, isVisible && reveal.visible].filter(Boolean).join(' ')}
             style={{ '--reveal-delay': '560ms' }}
+            onClick={() => openModal()}
           >
             Начать
           </Button>
