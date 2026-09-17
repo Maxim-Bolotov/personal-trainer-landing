@@ -4,12 +4,10 @@
 
 .inner {
   display: grid;
-  grid-template-columns: 1fr 0.9fr;
+  grid-template-columns: 0.8fr 1.2fr;
   align-items: center;
   gap: var(--space-10);
-  background-color: var(--color-accent);
   border-radius: var(--radius-lg);
-  padding: var(--space-10);
   overflow: hidden;
 }
 
@@ -51,10 +49,7 @@
 }
 
 .imageWrapper {
-  justify-self: end;
-  width: 100%;
-  max-width: 420px;
-  aspect-ratio: 503 / 478;
+  aspect-ratio: 545 / 453;
   border-radius: var(--radius-md);
   overflow: hidden;
 }
@@ -70,7 +65,6 @@
   .inner {
     grid-template-columns: 1fr;
     text-align: center;
-    padding: var(--space-6);
   }
 
   .content {
@@ -96,5 +90,14 @@
 @media (max-width: 420px) {
   .title {
     font-size: 1.75rem;
+  }
+}
+
+/* На десктопе (full-height секции, global.css) вертикальные отступы
+ * секции не нужны — высоту и центрирование контента уже даёт
+ * main > section { min-height; justify-content: center } */
+@media (min-width: 1025px) {
+  .section {
+    padding-block: 0;
   }
 }

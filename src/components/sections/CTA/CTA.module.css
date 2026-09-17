@@ -14,16 +14,26 @@
   overflow: hidden;
 }
 
+.inner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 120px 20px rgba(255, 35, 50, 0.15);
+  pointer-events: none;
+}
+
 .imageWrapper {
+  position: relative;
   border-radius: var(--radius-md);
   overflow: hidden;
   aspect-ratio: 4 / 3;
 }
 
+
 .image {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   filter: grayscale(0.5) contrast(1.15) brightness(0.9);
 }
 
@@ -65,5 +75,14 @@
 @media (max-width: 420px) {
   .title {
     font-size: 1.75rem;
+  }
+}
+
+/* На десктопе (full-height секции, global.css) вертикальные отступы
+ * секции не нужны — высоту и центрирование контента уже даёт
+ * main > section { min-height; justify-content: center } */
+@media (min-width: 1025px) {
+  .section {
+    padding-block: 0;
   }
 }

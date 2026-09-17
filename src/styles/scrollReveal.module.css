@@ -1,0 +1,42 @@
+/**
+ * Общие классы для scroll-reveal анимации блоков (About, Qualifications,
+ * CTA): элемент появляется, когда его секция входит во вьюпорт, и
+ * сбрасывается в исходное состояние при выходе — логика в
+ * useScrollReveal (src/hooks/useScrollReveal.js), сюда вынесена только
+ * визуальная часть.
+ *
+ * .fromLeft / .fromRight задают, с какой стороны "выезжает" блок —
+ * выбираются по тому, где элемент фактически расположен в сетке секции.
+ * Задержка внутри группы (картинка → заголовок → текст → кнопка/бейджи)
+ * задаётся инлайн через CSS-переменную --reveal-delay.
+ */
+
+.reveal {
+  opacity: 0;
+  transition:
+    opacity 1000ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 1000ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+.fromLeft {
+  transform: translateX(-56px);
+}
+
+.fromRight {
+  transform: translateX(56px);
+}
+
+.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    transition: none;
+    transform: none;
+    opacity: 1;
+  }
+}
