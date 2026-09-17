@@ -3,6 +3,7 @@ import Container from "../../ui/Container";
 import SectionTitle from "../../ui/SectionTitle";
 import Button from "../../ui/Button";
 import { programs } from "../../../data/programs";
+import { formatPrice } from "../../../utils/formatPrice";
 import styles from "./Programs.module.css";
 
 // Тройной повтор карточек для бесшовной зацикленной прокрутки: изначально встаём
@@ -87,7 +88,7 @@ function Programs() {
                 <h3 className={styles.title}>{program.title}</h3>
 
                 <p className={styles.price}>
-                  <span className={styles.priceValue}>{program.price}$</span>
+                  <span className={styles.priceValue}>{formatPrice(program.price)}</span>
                 </p>
                 <p className={styles.pricePeriod}>
                   Абонемент на {program.period}
