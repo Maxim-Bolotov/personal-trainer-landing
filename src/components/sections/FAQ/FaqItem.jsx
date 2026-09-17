@@ -17,7 +17,7 @@ function FaqItem({ question, answer, isOpen, onToggle }) {
       >
         <span>{question}</span>
         <span className={`${styles.icon} ${isOpen ? styles.iconOpen : ''}`} aria-hidden="true">
-          +
+          &#8595;
         </span>
       </button>
 

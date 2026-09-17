@@ -1,9 +1,9 @@
-import { useState } from 'react';
-import Container from '../../ui/Container';
-import SectionTitle from '../../ui/SectionTitle';
-import FaqItem from './FaqItem.jsx';
-import { faqItems } from '../../../data/faq';
-import styles from './Faq.module.css';
+import { useState } from "react";
+import Container from "../../ui/Container";
+import SectionTitle from "../../ui/SectionTitle";
+import FaqItem from "./FaqItem.jsx";
+import { faqItems } from "../../../data/faq";
+import styles from "./Faq.module.css";
 
 function Faq() {
   const [openId, setOpenId] = useState(faqItems[0]?.id ?? null);
@@ -16,7 +16,6 @@ function Faq() {
     <section id="faq" className={styles.section}>
       <Container className={styles.inner}>
         <SectionTitle
-          eyebrow="FAQ"
           title="Часто задаваемые вопросы"
           description="Я здесь, чтобы помочь!"
           className={styles.title}
