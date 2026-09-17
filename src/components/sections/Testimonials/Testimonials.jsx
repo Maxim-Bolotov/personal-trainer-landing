@@ -1,17 +1,58 @@
-import Container from '../../ui/Container';
-import SectionTitle from '../../ui/SectionTitle';
-import { testimonials } from '../../../data/testimonials';
-import { useCarousel } from '../../../hooks/useCarousel';
-import styles from './Testimonials.module.css';
+import { useEffect, useState } from "react";
+import Container from "../../ui/Container";
+import SectionTitle from "../../ui/SectionTitle";
+import { testimonials } from "../../../data/testimonials";
+import styles from "./Testimonials.module.css";
+
+const length = testimonials.length;
+// Клон последнего слайда в начале и клон первого в конце — чтобы стрелка "вперёд"
+// всегда ехала вправо (даже с последнего на первый), а "назад" — всегда влево.
+const slides = [testimonials[length - 1], ...testimonials, testimonials[0]];
 
 function Testimonials() {
-  const { index, next, prev, goTo } = useCarousel(testimonials.length);
-  const current = testimonials[index];
+  const [displayIndex, setDisplayIndex] = useState(1);
+  const [animate, setAnimate] = useState(true);
+
+  const activeIndex = (((displayIndex - 1) % length) + length) % length;
+
+  const next = () => {
+    setAnimate(true);
+    setDisplayIndex((i) => i + 1);
+  };
+
+  const prev = () => {
+    setAnimate(true);
+    setDisplayIndex((i) => i - 1);
+  };
+
+  const goTo = (targetIndex) => {
+    setAnimate(true);
+    setDisplayIndex(targetIndex + 1);
+  };
+
+  const handleTransitionEnd = () => {
+    if (displayIndex === 0) {
+      setAnimate(false);
+      setDisplayIndex(length);
+    } else if (displayIndex === length + 1) {
+      setAnimate(false);
+      setDisplayIndex(1);
+    }
+  };
+
+  // После бесшовного "прыжка" на клоне возвращаем анимацию для следующего клика.
+  useEffect(() => {
+    if (!animate) {
+      const id = requestAnimationFrame(() => setAnimate(true));
+      return () => cancelAnimationFrame(id);
+    }
+    return undefined;
+  }, [animate]);
 
   return (
     <section id="testimonials" className={styles.section}>
       <Container>
-        <SectionTitle align="center" eyebrow="Отзывы" title="Отзывы о нас" />
+        <SectionTitle align="center" title="Отзывы о нас" />
 
         <div className={styles.carousel}>
           <button
@@ -23,43 +64,59 @@ function Testimonials() {
             ←
           </button>
 
-          <article className={styles.card}>
-            <div className={styles.textCol}>
-              <span className={styles.quoteMark} aria-hidden="true">
-                <span className={styles.quoteBar} />
-                <span className={styles.quoteBar} />
-              </span>
+          <div className={styles.viewport}>
+            <div
+              className={styles.track}
+              style={{
+                transform: `translateX(-${displayIndex * 100}%)`,
+                transition: animate ? undefined : "none",
+              }}
+              onTransitionEnd={handleTransitionEnd}
+            >
+              {slides.map((testimonial, slideIndex) => (
+                <article
+                  key={`${testimonial.id}-${slideIndex}`}
+                  className={styles.card}
+                >
+                  <div className={styles.textCol}>
+                    <span className={styles.quoteMark} aria-hidden="true">
+                      <span className={styles.quoteBar} />
+                      <span className={styles.quoteBar} />
+                    </span>
 
-              <p className={styles.quote}>{current.quote}</p>
+                    <p className={styles.quote}>{testimonial.quote}</p>
 
-              <div className={styles.author}>
-                <p className={styles.name}>{current.name}</p>
-                <p className={styles.role}>{current.role}</p>
-              </div>
+                    <div className={styles.author}>
+                      <p className={styles.name}>{testimonial.name}</p>
+                      <p className={styles.role}>{testimonial.role}</p>
+                    </div>
+                  </div>
+
+                  <div className={styles.imageCol}>
+                    <div className={styles.photoRow}>
+                      <img
+                        src={testimonial.avatar}
+                        alt={testimonial.name}
+                        className={styles.photo}
+                        loading="lazy"
+                      />
+                      <img
+                        src={testimonial.avatarSecondary}
+                        alt=""
+                        aria-hidden="true"
+                        className={styles.photo}
+                        loading="lazy"
+                      />
+                    </div>
+                    <span className={styles.quoteMarkSmall} aria-hidden="true">
+                      <span className={styles.quoteBarSmall} />
+                      <span className={styles.quoteBarSmall} />
+                    </span>
+                  </div>
+                </article>
+              ))}
             </div>
-
-            <div className={styles.imageCol}>
-              <div className={styles.photoRow}>
-                <img
-                  src={current.avatar}
-                  alt={current.name}
-                  className={styles.photo}
-                  loading="lazy"
-                />
-                <img
-                  src={current.avatarSecondary}
-                  alt=""
-                  aria-hidden="true"
-                  className={styles.photo}
-                  loading="lazy"
-                />
-              </div>
-              <span className={styles.quoteMarkSmall} aria-hidden="true">
-                <span className={styles.quoteBarSmall} />
-                <span className={styles.quoteBarSmall} />
-              </span>
-            </div>
-          </article>
+          </div>
 
           <button
             type="button"
@@ -77,9 +134,11 @@ function Testimonials() {
               key={testimonial.id}
               type="button"
               role="tab"
-              aria-selected={dotIndex === index}
+              aria-selected={dotIndex === activeIndex}
               aria-label={`Отзыв ${dotIndex + 1}`}
-              className={`${styles.dot} ${dotIndex === index ? styles.dotActive : ''}`}
+              className={`${styles.dot} ${
+                dotIndex === activeIndex ? styles.dotActive : ""
+              }`}
               onClick={() => goTo(dotIndex)}
             />
           ))}
