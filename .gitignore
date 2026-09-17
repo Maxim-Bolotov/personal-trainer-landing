@@ -26,3 +26,6 @@ dist-ssr
 .env
 .env.local
 .env.*.local
+
+# Local Claude Code / Cursor debug screenshots — not project assets
+Claude outputs/
