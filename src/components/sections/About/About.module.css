@@ -1,5 +1,5 @@
 .about {
-  padding-block: var(--space-12);
+  padding-block: var(--space-6); /* мобильные/планшет: секция = экран, отступ компактный */
 }
 
 .inner {
@@ -82,6 +82,49 @@
   .stats {
     flex-wrap: wrap;
     gap: var(--space-6);
+  }
+}
+
+/* Мобильные: секция должна влезать в один экран */
+@media (max-width: 600px) {
+  .inner {
+    gap: var(--space-5);
+  }
+
+  .imageWrapper {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+  }
+
+  .content {
+    gap: var(--space-4);
+  }
+
+  .title {
+    font-size: var(--fs-h2-mobile);
+  }
+
+  .text {
+    font-size: var(--fs-body-sm);
+    line-height: 1.5;
+  }
+
+  .stats {
+    flex-wrap: nowrap;
+    gap: var(--space-3);
+    margin-top: var(--space-2);
+  }
+
+  .stat {
+    padding: var(--space-3) var(--space-2);
+  }
+
+  .statValue {
+    font-size: var(--fs-h4);
+  }
+
+  .statLabel {
+    font-size: var(--fs-caption);
   }
 }
 

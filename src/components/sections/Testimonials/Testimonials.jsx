@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Container from "../../ui/Container";
 import SectionTitle from "../../ui/SectionTitle";
 import { testimonials } from "../../../data/testimonials";
@@ -9,9 +9,16 @@ const length = testimonials.length;
 // всегда ехала вправо (даже с последнего на первый), а "назад" — всегда влево.
 const slides = [testimonials[length - 1], ...testimonials, testimonials[0]];
 
+// Порог свайпа: доля ширины слайда, после которой листаем на соседний.
+const SWIPE_THRESHOLD = 0.18;
+// Сдвиг пальца (px), после которого решаем, какой это жест — горизонтальный или вертикальный.
+const AXIS_LOCK_DISTANCE = 8;
+
 function Testimonials() {
   const [displayIndex, setDisplayIndex] = useState(1);
   const [animate, setAnimate] = useState(true);
+  const [dragOffset, setDragOffset] = useState(0);
+  const touchRef = useRef(null);
 
   const activeIndex = (((displayIndex - 1) % length) + length) % length;
 
@@ -29,6 +36,56 @@ function Testimonials() {
     setAnimate(true);
     setDisplayIndex(targetIndex + 1);
   };
+
+  // ---------- Свайп пальцем ----------
+  // Слайд едет за пальцем (transition отключён), по отпусканию — либо
+  // листаем на соседний, либо плавно возвращаемся. Вертикальный жест
+  // не трогаем — страница скроллится как обычно (touch-action: pan-y).
+  const handleTouchStart = (event) => {
+    const touch = event.touches[0];
+    touchRef.current = {
+      startX: touch.clientX,
+      startY: touch.clientY,
+      width: event.currentTarget.offsetWidth,
+      axis: null,
+    };
+  };
+
+  const handleTouchMove = (event) => {
+    const state = touchRef.current;
+    if (!state) return;
+
+    const touch = event.touches[0];
+    const dx = touch.clientX - state.startX;
+    const dy = touch.clientY - state.startY;
+
+    if (!state.axis) {
+      if (Math.abs(dx) < AXIS_LOCK_DISTANCE && Math.abs(dy) < AXIS_LOCK_DISTANCE) return;
+      state.axis = Math.abs(dx) > Math.abs(dy) ? "x" : "y";
+    }
+
+    if (state.axis === "x") {
+      setDragOffset(dx);
+    }
+  };
+
+  const handleTouchEnd = () => {
+    const state = touchRef.current;
+    touchRef.current = null;
+    if (!state || state.axis !== "x") return;
+
+    const ratio = dragOffset / state.width;
+    setDragOffset(0);
+    setAnimate(true);
+
+    if (ratio <= -SWIPE_THRESHOLD) {
+      setDisplayIndex((i) => i + 1);
+    } else if (ratio >= SWIPE_THRESHOLD) {
+      setDisplayIndex((i) => i - 1);
+    }
+  };
+
+  const isDragging = dragOffset !== 0;
 
   const handleTransitionEnd = () => {
     if (displayIndex === 0) {
@@ -64,12 +121,18 @@ function Testimonials() {
             ←
           </button>
 
-          <div className={styles.viewport}>
+          <div
+            className={styles.viewport}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+            onTouchCancel={handleTouchEnd}
+          >
             <div
               className={styles.track}
               style={{
-                transform: `translateX(-${displayIndex * 100}%)`,
-                transition: animate ? undefined : "none",
+                transform: `translateX(calc(-${displayIndex * 100}% + ${dragOffset}px))`,
+                transition: animate && !isDragging ? undefined : "none",
               }}
               onTransitionEnd={handleTransitionEnd}
             >

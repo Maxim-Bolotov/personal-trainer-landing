@@ -1,5 +1,5 @@
 .section {
-  padding-block: var(--space-12);
+  padding-block: var(--space-6); /* мобильные/планшет: секция = экран, отступ компактный */
 }
 
 .carousel {
@@ -46,6 +46,8 @@
 .viewport {
   overflow: hidden;
   border-radius: var(--radius-lg);
+  /* Вертикальный скролл страницы — браузеру, горизонтальный свайп — нам */
+  touch-action: pan-y;
 }
 
 .track {
@@ -186,6 +188,40 @@
 
   .navButton {
     display: none;
+  }
+
+  /* Всё должно помещаться в один экран: компактные отступы и шрифты */
+  .card {
+    gap: var(--space-5);
+    padding: var(--space-5) var(--space-4);
+  }
+
+  .quoteMark {
+    margin-bottom: var(--space-3);
+  }
+
+  .quoteBar {
+    width: 8px;
+    height: 28px;
+  }
+
+  .quote {
+    font-size: 1.0625rem;
+    line-height: 1.45;
+  }
+
+  .author {
+    margin-top: var(--space-4);
+  }
+
+  .imageCol {
+    width: 100%;
+    max-width: 280px;
+    aspect-ratio: 16 / 10;
+  }
+
+  .dots {
+    margin-top: var(--space-4);
   }
 }
 

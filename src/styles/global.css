@@ -10,6 +10,20 @@
 
 html {
   scroll-behavior: smooth;
+  /* Некоторые мобильные WebView (в т.ч. встроенный браузер Telegram)
+     скроллят именно html, а не body — если переполнение по горизонтали
+     появляется где угодно на странице (даже на 1px), вся страница
+     "уезжает" вбок и с правого края видна пустота. overflow-x:clip
+     нужен на ОБОИХ html и body, одного body недостаточно.
+     Важно: именно clip, а не hidden. У hidden есть побочный эффект —
+     по спеке CSS Overflow, если overflow-x не visible, а overflow-y
+     остаётся visible, браузер сам "поднимает" overflow-y до auto. Из-за
+     этого body неявно получал свой собственный скролл-контейнер, и
+     sticky-хедер (position:sticky на .header) на мобильных из-за этого
+     ломался — либо не прилипал, либо пропадал при скролле. clip не
+     запускает этот побочный эффект. */
+  overflow-x: clip;
+  width: 100%;
 }
 
 body {
@@ -20,7 +34,8 @@ body {
   line-height: var(--lh-body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  overflow-x: hidden;
+  overflow-x: clip;
+  width: 100%;
 }
 
 h1,
@@ -77,24 +92,51 @@ ol {
   color: var(--color-text-primary);
 }
 
-/* ---------- Desktop: секции на весь экран + скролл по секциям ----------
- * Только на десктопе (совпадает с брейкпоинтом Hero, где меняется макет).
+/* ---------- Секции на весь экран + скролл по секциям ----------
+ * Только десктоп: одна секция = один экран, строго, через нативный CSS
+ * scroll-snap — работает предсказуемо с колесом мыши/трекпадом.
  * --header-height публикуется в JS хедером (Header.jsx, ResizeObserver) —
- * реальная высота sticky-хедера, а не догадка. Фолбэк 90px — на случай,
- * если JS ещё не отработал (первый кадр до эффекта).
+ * реальная высота sticky-хедера. Фолбэк 90px — на первый кадр до эффекта.
+ *
+ * На мобильных от этой логики отказались целиком (см. историю — пробовали
+ * mandatory snap на всех секциях, потом JS-пагинацию свайпом, потом
+ * mandatory только на первой/последней + proximity в середине — каждый
+ * вариант давал свои баги/дёрганья). Ниже, в @media (max-width: 900px),
+ * весь scroll-snap на мобильных просто выключен — обычный свободный
+ * скролл, как в любом сайте без спецэффектов.
  */
-@media (min-width: 1025px) {
+:root {
+  --screen-h: 100vh;
+}
+
+@supports (height: 100svh) {
+  :root {
+    --screen-h: 100svh;
+  }
+}
+
+html {
+  scroll-snap-type: y mandatory;
+  scroll-padding-top: var(--header-height, 90px);
+}
+
+main > section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: calc(var(--screen-h) - var(--header-height, 90px));
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+@media (max-width: 900px) {
   html {
-    scroll-snap-type: y mandatory;
-    scroll-padding-top: var(--header-height, 90px);
+    scroll-snap-type: none;
   }
 
   main > section {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    min-height: calc(100vh - var(--header-height, 90px));
-    scroll-snap-align: start;
-    scroll-snap-stop: always;
+    min-height: auto;
+    scroll-snap-align: none;
+    scroll-snap-stop: normal;
   }
 }

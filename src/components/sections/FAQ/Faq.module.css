@@ -1,5 +1,14 @@
 .section {
-  padding-block: var(--space-12);
+  padding-block: var(--space-6); /* мобильные/планшет: секция = экран, отступ компактный */
+}
+
+/* На мобильных секция full-height (global.css), а контент чуть выше
+   min-height экрана — чтобы после свайпа (см. useSectionPaging) низ
+   списка не обрезался, слегка ужимаем отступы именно на мобильных. */
+@media (max-width: 900px) {
+  .section {
+    padding-block: var(--space-5);
+  }
 }
 
 .inner {
@@ -76,12 +85,36 @@
 }
 
 @media (max-width: 900px) {
+  .answerOpen .answer {
+    padding-bottom: var(--space-4);
+  }
+}
+
+@media (max-width: 900px) {
   .inner {
     grid-template-columns: 1fr;
+    gap: var(--space-6);
   }
 
   .title {
     position: static;
+    /* Отступ до списка теперь только через gap у .inner — раньше он
+       складывался с margin-bottom и получался вдвое больше нужного. */
+  }
+
+  /* Секция на весь экран (global.css), контента должно быть на весь
+     экран — вопросы крупнее и просторнее, а не мелкой пачкой сверху. */
+  .question {
+    padding-block: var(--space-7, 2.5rem);
+    font-size: var(--fs-h4);
+  }
+
+  .icon {
+    font-size: var(--fs-h3);
+  }
+
+  .answer {
+    font-size: var(--fs-body);
   }
 }
 

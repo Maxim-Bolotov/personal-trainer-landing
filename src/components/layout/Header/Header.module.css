@@ -112,8 +112,17 @@
 @media (max-width: 900px) {
   .nav {
     position: fixed;
-    inset: 0;
+    left: 0;
+    right: 0;
     top: 76px;
+    bottom: 0;
+    /* Ширина явно 100%, а не только left/right:0 — в некоторых мобильных
+       WebView (например, встроенный браузер Telegram) position:fixed
+       вместе с transform на этом же элементе считает ширину неверно,
+       из-за чего вся страница "уезжает" по горизонтали. */
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
     background-color: var(--color-bg);
     transform: translateY(-110%);
     transition: transform var(--transition-base);

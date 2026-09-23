@@ -29,6 +29,60 @@
   color: var(--color-text-primary);
 }
 
+/* Построчный реверс заголовка (1-я/3-я строка — справа, 2-я — слева) и
+   единый блок текста+кнопки (снизу вверх) — общие для мобильных, планшета
+   и десктопа. Шаг проявления управляется классом .lineVisible/
+   .textGroupVisible, который переключается из JS через цепочку setTimeout
+   в Hero.jsx (step), а не через CSS animation-delay/transition-delay: на
+   iOS Safari у анимаций с долгой задержкой поверх постоянно
+   перерисовывающегося <video> встречается баг — финальный кадр остаётся
+   "недокрашенным". Затемнение видео (.overlay) при этом остаётся только
+   для мобильных/планшета — на десктопе анимирует исключительно левый
+   текстовый блок, видео и вся секция статичны.
+   
+   Дистанция сдвига — через переменную --slide-offset (десктоп переопределяет
+   только её ниже), а НЕ через повторное объявление transform в
+   .titleLine.fromRight/.fromLeft — иначе получаем два правила с одинаковой
+   специфичностью (0,2,0) на одном элементе, и по порядку в файле позже
+   объявленное (десктопное) забивает transform:translateX(0) из
+   .titleLine.lineVisible — строка так и остаётся "уехавшей" и после реального
+   проявления. Через переменную конфликта нет: transform всегда задаёт только
+   одно из трёх правил (fromRight, fromLeft или lineVisible). */
+.titleLine {
+  display: block;
+  white-space: nowrap;
+  --slide-offset: 48px;
+  opacity: 0;
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.titleLine.fromRight {
+  transform: translateX(var(--slide-offset));
+}
+
+.titleLine.fromLeft {
+  transform: translateX(calc(var(--slide-offset) * -1));
+}
+
+.titleLine.lineVisible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.textGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+
+.textGroup.textGroupVisible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 .text {
   font-size: 20px;
   font-weight: 400;
@@ -55,30 +109,146 @@
   filter: grayscale(0.55) contrast(1.15) brightness(0.85);
 }
 
-/* ---------- Responsive ---------- */
 @media (max-width: 1024px) {
+  .image {
+    filter: grayscale(0.55) contrast(1.1) brightness(0.6);
+  }
+}
+
+/* Спиннер поверх постера/видео, пока оно не готово к показу (см.
+   videoReady в Hero.jsx) — общий для мобильных, планшета и десктопа.
+   Лежит внутри .imageWrapper, поэтому у него всегда есть positioned
+   родитель (position: relative на десктопе, position: absolute на
+   мобильных — см. ниже). */
+.spinner {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.25);
+  pointer-events: none;
+}
+
+.spinner::after {
+  content: '';
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, 0.25);
+  border-top-color: rgba(255, 255, 255, 0.9);
+  animation: heroSpin 0.8s linear infinite;
+}
+
+@keyframes heroSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------- Responsive: мобильные / планшет ----------
+ * Видео — фон на весь экран-секцию. Как только оно готово (спиннер исчез),
+ * по очереди проявляются: затемнение + 1-я строка заголовка (справа),
+ * 2-я строка (слева), 3-я строка (справа), и последним — блок текста
+ * с кнопкой одной группой, снизу вверх (сама механика .titleLine/.textGroup
+ * теперь общая с десктопом, см. выше — тут только раскладка и затемнение). */
+@media (max-width: 1024px) {
+  .hero {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: calc(var(--screen-h) - var(--header-height, 90px));
+    padding-block: var(--space-6);
+  }
+
+  /* Ровное затемнение поверх видео на всю секцию — единый тон, а не
+     полосы разной интенсивности (иначе на светлых участках кадра текст
+     выглядит блёклым/серым, а на тёмных — будто под пятном тени).
+     Чуть темнее у низа, где кнопка. Только мобильные/планшет — на
+     десктопе видео всегда статично видно, см. .overlay ниже. */
+  .overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.55) 0%,
+      rgba(0, 0, 0, 0.6) 60%,
+      rgba(0, 0, 0, 0.7) 100%
+    );
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.8s ease-out;
+  }
+
+  .overlay.revealed {
+    opacity: 1;
+  }
+
   .inner {
+    position: static;
     grid-template-columns: 1fr;
     text-align: center;
   }
 
   .content {
+    position: relative;
+    z-index: 2;
     align-items: center;
     max-width: 100%;
     margin-inline: auto;
+    gap: var(--space-5);
+  }
+
+  .textGroup {
+    align-items: center;
+  }
+
+  /* Одно предложение — одна строка: размер от ширины экрана,
+     самая длинная строка ("Живи увереннее.") влезает в контейнер */
+  .title {
+    font-size: clamp(1.5rem, 9.6vw, 3.25rem);
+    line-height: 1.15;
+  }
+
+  .text {
+    font-size: var(--fs-body);
+    color: rgba(255, 255, 255, 0.85);
   }
 
   .imageWrapper {
-    justify-self: center;
+    position: absolute;
+    inset: 0;
+    z-index: 0;
     width: 100%;
-    max-width: 380px;
-    aspect-ratio: 628 / 699;
+    max-width: none;
+    aspect-ratio: auto;
+    border-radius: 0;
   }
 }
 
-@media (max-width: 600px) {
-  .title {
-    font-size: var(--fs-h1-mobile);
+/* Для тех, кто отключил анимации в системе — текст сразу, без задержки.
+   Общее правило (не привязано к брейкпоинту) — актуально и для десктопа.
+   Спиннер не трогаем: он не "анимация проявления", а индикатор загрузки. */
+@media (prefers-reduced-motion: reduce) {
+  .overlay,
+  .titleLine,
+  .textGroup {
+    transition: none;
+  }
+
+  .spinner::after {
+    animation-duration: 1.6s;
+  }
+}
+
+/* На десктопе оверлея (затемнения видео) нет и не будет — анимирует
+   только левый текстовый блок (.titleLine/.textGroup выше), видео и вся
+   остальная секция остаются статичными на протяжении всей раскладки. */
+@media (min-width: 1025px) {
+  .overlay {
+    display: none;
   }
 }
 
@@ -112,6 +282,23 @@
   .content {
     height: auto;
     align-self: center;
+  }
+
+  /* Заголовок сдвигается на бОльшее расстояние — шрифт крупнее, короткий
+     свайп на 48px здесь смотрится слабо. Меняем только переменную (см.
+     комментарий у .titleLine выше) — не сам transform. */
+  .titleLine {
+    --slide-offset: 64px;
+  }
+
+  /* Текст левого блока выровнен по левому краю (.inner тут не center'ит
+     текст, в отличие от мобильной раскладки) — без этого flex column по
+     умолчанию растягивает кнопку на всю ширину блока. Заодно это и есть
+     фикс "кнопка прижата к тексту": до этого .textGroup вне мобильного
+     медиа-запроса не был flex-контейнером вовсе, gap между текстом и
+     кнопкой не применялся. */
+  .textGroup {
+    align-items: flex-start;
   }
 
   .imageWrapper {

@@ -1,5 +1,5 @@
 .section {
-  padding-block: var(--space-12);
+  padding-block: var(--space-6); /* мобильные/планшет: секция = экран, отступ компактный */
 }
 
 .inner {

@@ -5,8 +5,8 @@ import styles from './About.module.css';
 
 const stats = [
   { id: 'clients', value: '2000+', label: 'довольных клиентов' },
-  { id: 'years', value: '10', label: 'лет опыта' },
-  { id: 'programs', value: '15', label: 'Лет в спорте' },
+  { id: 'years', value: '6', label: 'лет опыта' },
+  { id: 'sport', value: '24', label: 'года в спорте' },
 ];
 
 function About() {
@@ -37,7 +37,7 @@ function About() {
               .join(' ')}
             style={{ '--reveal-delay': '200ms' }}
           >
-            Кто такой Владислав?
+            Коротко обо мне
           </h2>
           <p
             className={[styles.text, reveal.reveal, reveal.fromRight, isVisible && reveal.visible]
@@ -45,8 +45,9 @@ function About() {
               .join(' ')}
             style={{ '--reveal-delay': '380ms' }}
           >
-            Как увлечённый персональный тренер, я верю в то, что могу помочь людям достичь своих
-            целей в фитнесе через индивидуальный коучинг и поддержку.
+            Меня зовут Владислав, мне 30 лет, и в спорте я с 6 лет. Персональным тренером
+            работаю с 2020 года — помогаю людям стать сильнее, увереннее в себе и в отличной
+            форме через грамотные тренировки и постоянную поддержку. Рад буду поработать и с вами!
           </p>
 
           <dl

@@ -1,5 +1,5 @@
 .section {
-  padding-block: var(--space-12);
+  padding-block: var(--space-6); /* мобильные/планшет: секция = экран, отступ компактный */
 }
 
 .inner {
@@ -55,11 +55,49 @@
   max-width: 440px;
 }
 
+/* Контента меньше экрана — не растягиваем секцию на весь экран
+   (иначе пустой промежуток сверху/снизу, особенно заметный на стыке
+   с предыдущей короткой секцией, например FAQ). */
+@media (max-width: 1024px) {
+  .section {
+    min-height: auto;
+  }
+}
+
 @media (max-width: 900px) {
+  /* Секция сама становится "карточкой" на весь экран:
+     фон и красное свечение — по краям всей секции-экрана,
+     а не отдельного блока внутри неё. */
+  .section {
+    position: relative;
+    background-color: var(--color-surface);
+  }
+
+  .section::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    box-shadow: inset 0 0 120px 20px rgba(255, 35, 50, 0.15);
+    pointer-events: none;
+  }
+
   .inner {
     grid-template-columns: 1fr;
     text-align: center;
-    padding: var(--space-6);
+    padding: 0 var(--container-padding);
+    background-color: transparent;
+    border-radius: 0;
+    overflow: visible;
+  }
+
+  .inner::after {
+    display: none;
+  }
+
+  .imageWrapper {
+    width: 100%;
+    max-width: 320px;
+    justify-self: center;
   }
 
   .content {

@@ -14,6 +14,15 @@ import styles from "./Programs.module.css";
 // всегда едущая в ту сторону, куда нажали/свайпнули.
 const loopedPrograms = [...programs, ...programs, ...programs];
 
+// Ширина одного комплекта карточек = расстояние от первой карточки до её клона.
+// Считаем по offsetLeft, а не scrollWidth / 3 — не зависит от паддингов трека
+// и точно совпадает с позициями scroll-snap.
+const getSetWidth = (track) => {
+  const cards = track.children;
+  if (cards.length <= programs.length) return track.scrollWidth / 3;
+  return cards[programs.length].offsetLeft - cards[0].offsetLeft;
+};
+
 function Programs() {
   const { openModal } = useBookingModal();
   const trackRef = useRef(null);
@@ -23,8 +32,7 @@ function Programs() {
     const track = trackRef.current;
     if (!track) return undefined;
 
-    const oneSetWidth = track.scrollWidth / 3;
-    track.scrollLeft = oneSetWidth;
+    track.scrollLeft = getSetWidth(track);
 
     return () => {
       if (settleTimer.current) clearTimeout(settleTimer.current);
@@ -40,7 +48,7 @@ function Programs() {
       const currentTrack = trackRef.current;
       if (!currentTrack) return;
 
-      const oneSetWidth = currentTrack.scrollWidth / 3;
+      const oneSetWidth = getSetWidth(currentTrack);
       while (currentTrack.scrollLeft < oneSetWidth) {
         currentTrack.scrollLeft += oneSetWidth;
       }
@@ -66,7 +74,7 @@ function Programs() {
         <SectionTitle
           align="center"
           title="Программы тренировок"
-          description="Выберите формат сопровождения, который подходит именно вам — от базового старта до полного погружения."
+          description="Выберите формат сопровождения, который подходит именно вам — от базового старта до полного погружения. Первая консультация — бесплатно."
         />
 
         <div className={styles.carousel}>
@@ -93,7 +101,7 @@ function Programs() {
                   <span className={styles.priceValue}>{formatPrice(program.price)}</span>
                 </p>
                 <p className={styles.pricePeriod}>
-                  Абонемент на {program.period}
+                  {program.period}
                 </p>
 
                 <p className={styles.description}>{program.description}</p>

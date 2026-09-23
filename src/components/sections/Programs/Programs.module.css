@@ -1,5 +1,5 @@
 .section {
-  padding-block: var(--space-12);
+  padding-block: var(--space-6); /* мобильные/планшет: секция = экран, отступ компактный */
 }
 
 .carousel {
@@ -140,6 +140,42 @@
 @media (max-width: 900px) {
   .navButton {
     display: none;
+  }
+
+  /* Лента вылезает за правый паддинг контейнера до края экрана, слева
+     обрезана по линии контента (чтобы не торчал край предыдущей карточки).
+     Справа видно ~30% следующей: w + gap + 0.3w = ширина трека. */
+  .track {
+    --track-gap: var(--space-4);
+    gap: var(--track-gap);
+    margin-right: calc(-1 * var(--container-padding));
+  }
+
+  .card {
+    width: calc((100% - var(--track-gap)) / 1.3);
+    gap: var(--space-3);
+    padding: var(--space-5) var(--space-4);
+  }
+
+  .card:hover {
+    transform: none;
+  }
+
+  .title {
+    font-size: 1.375rem;
+    min-height: calc(1.375rem * var(--lh-heading) * 3);
+  }
+
+  .priceValue {
+    font-size: 2.25rem;
+  }
+
+  .price {
+    margin-top: 0;
+  }
+
+  .cta {
+    margin-top: var(--space-1);
   }
 }
 
