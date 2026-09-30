@@ -18,7 +18,7 @@ function escapeHtml(value) {
 
 function formatLeadMessage(lead) {
   const lines = [
-    '<b>Новая заявка с лендинга</b>',
+    '<b>Новая заявка</b>',
     '',
     `<b>Имя:</b> ${escapeHtml(lead.name)}`,
     `<b>Возраст:</b> ${escapeHtml(lead.age)}`,
