@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from "react";
+import Button from "../../ui/Button";
 import Container from "../../ui/Container";
 import SectionTitle from "../../ui/SectionTitle";
 import { testimonials } from "../../../data/testimonials";
+import ChatDialog from "./ChatDialog";
 import styles from "./Testimonials.module.css";
 
 const length = testimonials.length;
@@ -18,6 +20,8 @@ function Testimonials() {
   const [displayIndex, setDisplayIndex] = useState(1);
   const [animate, setAnimate] = useState(true);
   const [dragOffset, setDragOffset] = useState(0);
+  // Скриншот переписки, открытый в диалоге (null — диалог закрыт)
+  const [chatSrc, setChatSrc] = useState(null);
   const touchRef = useRef(null);
 
   const activeIndex = (((displayIndex - 1) % length) + length) % length;
@@ -60,7 +64,11 @@ function Testimonials() {
     const dy = touch.clientY - state.startY;
 
     if (!state.axis) {
-      if (Math.abs(dx) < AXIS_LOCK_DISTANCE && Math.abs(dy) < AXIS_LOCK_DISTANCE) return;
+      if (
+        Math.abs(dx) < AXIS_LOCK_DISTANCE &&
+        Math.abs(dy) < AXIS_LOCK_DISTANCE
+      )
+        return;
       state.axis = Math.abs(dx) > Math.abs(dy) ? "x" : "y";
     }
 
@@ -109,7 +117,7 @@ function Testimonials() {
   return (
     <section id="testimonials" className={styles.section}>
       <Container>
-        <SectionTitle align="center" title="Отзывы о нас" />
+        <SectionTitle align="center" title="Отзывы обо мне" />
 
         <div className={styles.carousel}>
           <button
@@ -131,53 +139,121 @@ function Testimonials() {
             <div
               className={styles.track}
               style={{
-                transform: `translateX(calc(-${displayIndex * 100}% + ${dragOffset}px))`,
+                transform: `translateX(calc(-${
+                  displayIndex * 100
+                }% + ${dragOffset}px))`,
                 transition: animate && !isDragging ? undefined : "none",
               }}
               onTransitionEnd={handleTransitionEnd}
             >
-              {slides.map((testimonial, slideIndex) => (
-                <article
-                  key={`${testimonial.id}-${slideIndex}`}
-                  className={styles.card}
-                >
-                  <div className={styles.textCol}>
-                    <span className={styles.quoteMark} aria-hidden="true">
-                      <span className={styles.quoteBar} />
-                      <span className={styles.quoteBar} />
-                    </span>
+              {slides.map((testimonial, slideIndex) => {
+                const hasPhotos = Boolean(
+                  testimonial.before && testimonial.after
+                );
+                const hasQuote = Boolean(testimonial.quote);
+                const cardClasses = [
+                  styles.card,
+                  !hasPhotos && styles.cardTextOnly,
+                  !hasQuote && styles.cardPhotosOnly,
+                ]
+                  .filter(Boolean)
+                  .join(" ");
 
-                    <p className={styles.quote}>{testimonial.quote}</p>
+                return (
+                  <article
+                    key={`${testimonial.id}-${slideIndex}`}
+                    className={cardClasses}
+                    // Неактивные слайды (и клоны) не должны ловить фокус: иначе браузер
+                    // прокрутит viewport к сфокусированной кнопке и собьёт карусель.
+                    inert={slideIndex !== displayIndex}
+                  >
+                    <div className={styles.textCol}>
+                      {hasQuote && (
+                        <>
+                          <span className={styles.quoteMark} aria-hidden="true">
+                            <span className={styles.quoteBar} />
+                            <span className={styles.quoteBar} />
+                          </span>
 
-                    <div className={styles.author}>
-                      <p className={styles.name}>{testimonial.name}</p>
-                      <p className={styles.role}>{testimonial.role}</p>
+                          <p className={styles.quote}>{testimonial.quote}</p>
+                        </>
+                      )}
+
+                      <div className={styles.author}>
+                        <p className={styles.name}>{testimonial.name}</p>
+                        <p className={styles.role}>{testimonial.role}</p>
+                      </div>
+
+                      {testimonial.chat && (
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          className={styles.chatButton}
+                          aria-haspopup="dialog"
+                          onClick={() => setChatSrc(testimonial.chat)}
+                        >
+                          <svg
+                            className={styles.chatIcon}
+                            viewBox="0 0 24 24"
+                            width="16"
+                            height="16"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            aria-hidden="true"
+                          >
+                            <path d="M21 12a8 8 0 0 1-11.7 7.1L4 20l1-4.6A8 8 0 1 1 21 12Z" />
+                          </svg>
+                          Смотреть переписку
+                        </Button>
+                      )}
                     </div>
-                  </div>
 
-                  <div className={styles.imageCol}>
-                    <div className={styles.photoRow}>
-                      <img
-                        src={testimonial.avatar}
-                        alt={testimonial.name}
-                        className={styles.photo}
-                        loading="lazy"
-                      />
-                      <img
-                        src={testimonial.avatarSecondary}
-                        alt=""
-                        aria-hidden="true"
-                        className={styles.photo}
-                        loading="lazy"
-                      />
-                    </div>
-                    <span className={styles.quoteMarkSmall} aria-hidden="true">
-                      <span className={styles.quoteBarSmall} />
-                      <span className={styles.quoteBarSmall} />
-                    </span>
-                  </div>
-                </article>
-              ))}
+                    {hasPhotos && (
+                      <div className={styles.imageCol}>
+                        <div className={styles.photoRow}>
+                          <figure className={styles.photoFrame}>
+                            <img
+                              src={testimonial.before}
+                              alt={`${testimonial.name}: фото до`}
+                              className={styles.photo}
+                              width="640"
+                              height="960"
+                              loading="lazy"
+                            />
+                            <figcaption className={styles.tag}>До</figcaption>
+                          </figure>
+                          <figure className={styles.photoFrame}>
+                            <img
+                              src={testimonial.after}
+                              alt={`${testimonial.name}: фото после`}
+                              className={styles.photo}
+                              width="640"
+                              height="960"
+                              loading="lazy"
+                            />
+                            <figcaption
+                              className={`${styles.tag} ${styles.tagAfter}`}
+                            >
+                              После
+                            </figcaption>
+                          </figure>
+                        </div>
+                        <span
+                          className={styles.quoteMarkSmall}
+                          aria-hidden="true"
+                        >
+                          <span className={styles.quoteBarSmall} />
+                          <span className={styles.quoteBarSmall} />
+                        </span>
+                      </div>
+                    )}
+                  </article>
+                );
+              })}
             </div>
           </div>
 
@@ -207,6 +283,8 @@ function Testimonials() {
           ))}
         </div>
       </Container>
+
+      <ChatDialog src={chatSrc} onClose={() => setChatSrc(null)} />
     </section>
   );
 }
